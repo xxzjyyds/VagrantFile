@@ -57,7 +57,7 @@ class Database implements Service, AuthInterface
         if (! $user) return null;
 
         $ret = $this->getConnection()
-            ->fetch('SELECT * FROM vagrant_auth WHERE username = ?', $user->getUsername())
+            ->fetch('SELECT * FROM users WHERE username = ?', $user->getUsername())
         ;
 
         if ($ret && $hash == $ret->password.$ret->permissions.$ret->homedir.$ret->role) {
@@ -70,7 +70,7 @@ class Database implements Service, AuthInterface
     public function authenticate($username, $password): bool
     {
         $ret = $this->getConnection()
-            ->fetch('SELECT * FROM vagrant_auth WHERE username = ?', $username)
+            ->fetch('SELECT * FROM users WHERE username = ?', $username)
         ;
 
         if ($ret && $this->verifyPassword($password, $ret->password)) {
@@ -104,7 +104,7 @@ class Database implements Service, AuthInterface
             throw new \Exception('Username already taken');
         }
 
-        $this->getConnection()->query('UPDATE vagrant_auth SET', [
+        $this->getConnection()->query('UPDATE users SET', [
             'username' => $user->getUsername(),
             'name' => $user->getName(),
             'homedir' => $user->getHomeDir(),
@@ -113,7 +113,7 @@ class Database implements Service, AuthInterface
         ], 'WHERE username = ?', $username);
 
         if ($password) {
-            $this->getConnection()->query('UPDATE vagrant_auth SET', [
+            $this->getConnection()->query('UPDATE users SET', [
                 'password' => $this->hashPassword($password),
             ], 'WHERE username = ?', $username);
         }
@@ -127,7 +127,7 @@ class Database implements Service, AuthInterface
             throw new \Exception('Username already taken');
         }
 
-        $this->getConnection()->query('INSERT INTO vagrant_auth', [
+        $this->getConnection()->query('INSERT INTO users', [
             'username' => $user->getUsername(),
             'name' => $user->getName(),
             'role' => $user->getRole(),
@@ -145,7 +145,7 @@ class Database implements Service, AuthInterface
             throw new \Exception('User not found');
         }
 
-        $this->getConnection()->query('DELETE FROM vagrant_auth WHERE username = ?', $user->getUsername());
+        $this->getConnection()->query('DELETE FROM users WHERE username = ?', $user->getUsername());
 
         return true;
     }
@@ -153,7 +153,7 @@ class Database implements Service, AuthInterface
     public function find($username): ?User
     {
         $row = $this->getConnection()
-            ->fetch('SELECT * FROM vagrant_auth WHERE username = ?', $username)
+            ->fetch('SELECT * FROM users WHERE username = ?', $username)
         ;
 
         if ($row) {
