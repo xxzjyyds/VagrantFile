@@ -10,11 +10,11 @@ return [
     'lockout_timeout' => 15, // ip lockout timeout in seconds
 
     'frontend_config' => [
-        'app_name' => 'FileGator',
+        'app_name' => 'VagrantFile',
         'app_version' => APP_VERSION,
         'language' => 'english',
-        'logo' => 'https://filegator.io/filegator_logo.svg',
-        'upload_max_size' => 100 * 1024 * 1024, // 100MB
+        'logo' => 'img/logo.png',
+        'upload_max_size' => 20 * 1024 * 1024 * 1024, // 20GB
         'upload_chunk_size' => 1 * 1024 * 1024, // 1MB
         'upload_simultaneous' => 3,
         'default_archive_name' => 'archive.zip',
